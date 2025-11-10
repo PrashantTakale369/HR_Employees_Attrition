@@ -157,31 +157,16 @@ npm run dev
 - **Timeline Estimates**: Immediate, short-term, medium-term
 - **Cost-Impact Analysis**: High/medium/low impact and cost ratings
 
-## 🚢 Deployment
+<img width="1920" height="1080" alt="Screenshot (451)" src="https://github.com/user-attachments/assets/631cb4df-0816-4017-804f-21a188aef06e" />
+<img width="1920" height="1080" alt="Screenshot (452)" src="https://github.com/user-attachments/assets/da6a2e80-29ab-4f17-ae70-c03f39adbcc3" />
+<img width="1920" height="1080" alt="Screenshot (454)" src="https://github.com/user-attachments/assets/5a77162c-d967-4549-963d-e6334d4a8c01" />
+<img width="1920" height="1080" alt="Screenshot (455)" src="https://github.com/user-attachments/assets/1b0586bc-02de-4672-9104-2588b8c17732" />
+<img width="1920" height="1080" alt="Screenshot (456)" src="https://github.com/user-attachments/assets/8984edbd-e265-403f-8081-3a37597eb57a" />
+<img width="1920" heigh<img width="1920" height="1080" alt="Screenshot (458)" src="https://github.com/user-attachments/assets/99d2d1b0-f883-4156-90d0-c88b71e18159" />
+<img width="1920" height="1080" alt="Screenshot (458)" src="https://github.com/user-attachments/assets/25d3c20e-c747-46a6-a58b-a5cdf0cbea02" />
+<img width="1920" height="1080" alt="Screenshot (459)" src="https://github.com/user-attachments/assets/950e9735-74d1-44b5-b871-14841b028a0c" />
 
-### Frontend Deployment
-Deploy to:
-- **Vercel** (Recommended)
-- **Netlify**
-- **GitHub Pages**
-- **AWS S3 + CloudFront**
 
-```bash
-npm run build
-# Deploy the 'dist' folder
-```
-
-### Python ML API Deployment
-Deploy to:
-- **Heroku**
-- **AWS Elastic Beanstalk**
-- **Google Cloud Run**
-- **Azure App Service**
-
-```bash
-cd python-ml
-# See PYTHON_ML_SETUP.md for Docker/cloud deployment
-```
 
 ## 📊 Project Structure
 
