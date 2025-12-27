@@ -37,14 +37,6 @@ python train_model.py
 python api_server.py
 ```
 
-**Linux/Mac:**
-```bash
-cd python-ml
-chmod +x setup.sh
-./setup.sh
-python3 train_model.py
-python3 api_server.py
-```
 
 API runs at: `http://localhost:5000`  
 **Interactive API Docs:** `http://localhost:5000/docs`
