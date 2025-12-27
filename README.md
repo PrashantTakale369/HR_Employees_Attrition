@@ -2,15 +2,17 @@
 
 ## What is this?
 
-This is a web application that helps HR teams figure out which employees might leave the company soon. 
+This is an end-to-end machine learning system that helps HR teams predict which employees might leave the company soon. 
 
 You know how expensive it is when good people quit - recruitment costs, training new hires, lost productivity. This tool analyzes your workforce data and tells you who's at risk of leaving before it happens, so you can actually do something about it.
 
-The app uses machine learning (Random Forest model with 85-90% accuracy) trained on real IBM HR data to spot patterns that usually lead to attrition. It doesn't just give you a "yes/no" answer - it shows you WHY someone might leave (low pay, bad work-life balance, lack of growth) and suggests specific things you can do to keep them around.
+The app uses a Random Forest machine learning model (85-90% accuracy) trained on real IBM HR data to spot patterns that usually lead to attrition. It doesn't just give you a "yes/no" answer - it shows you WHY someone might leave (low pay, bad work-life balance, lack of growth) and suggests specific things you can do to keep them around.
 
-Built with React + TypeScript on the front end and Python + Flask for the ML backend.
+Built with React + TypeScript on the front end and Python + Flask + scikit-learn for the ML backend.
 
 ## 🚀 Quick Start
+
+### Frontend Setup
 
 ```bash
 # Clone the repository
@@ -25,6 +27,27 @@ npm run dev
 ```
 
 Frontend runs at: `http://localhost:8082`
+
+### Python ML Backend Setup
+
+**Windows:**
+```bash
+cd python-ml
+setup.bat
+python train_model.py
+python api_server.py
+```
+
+**Linux/Mac:**
+```bash
+cd python-ml
+chmod +x setup.sh
+./setup.sh
+python3 train_model.py
+python3 api_server.py
+```
+
+API runs at: `http://localhost:5000`
 
 ## 🎯 Key Features
 
@@ -47,6 +70,14 @@ Frontend runs at: `http://localhost:8082`
 - **Tailwind CSS** - Utility-first styling
 - **React Router** - Client-side routing
 
+### Backend (ML)
+- **Python 3.8+** - Programming language
+- **Flask** - REST API framework
+- **scikit-learn** - Machine learning library
+- **pandas** - Data manipulation
+- **numpy** - Numerical computing
+- **Random Forest** - ML algorithm (85-90% accuracy)
+
 ### Data
 - **IBM HR Attrition Dataset** - 1470 employee records
 - **30+ features** - Age, job satisfaction, income, etc.
@@ -63,24 +94,27 @@ HR_Employees_Attrition/
 │   ├── data/              # Employee data
 │   └── contexts/          # React contexts
 ├── public/                # Static assets and dataset
-├── python-ml/             # Python ML setup files
-│   ├── data/             # IBM HR dataset
-│   ├── setup.bat         # Windows setup
-│   ├── setup.sh          # Linux/Mac setup
-│   └── requirements.txt  # Python dependencies
-├── docs/                  # All documentation files
-└── package.json          # Node.js dependencies
+├── python-ml/             # Python ML backend
+│   ├── attrition_model.py    # ML model implementation
+│   ├── train_model.py        # Model training script
+│   ├── test_model.py         # Testing and evaluation
+│   ├── api_server.py         # Flask REST API
+│   ├── convert_data.py       # Data preprocessing
+│   ├── data/                 # IBM HR dataset
+│   ├── preprossing_file/     # Jupyter notebook analysis
+│   ├── setup.bat             # Windows setup
+│   ├── setup.sh              # Linux/Mac setup
+│   └── requirements.txt      # Python dependencies
+└── package.json              # Node.js dependencies
 ```
 
 ## 📚 Documentation
 
-All documentation has been organized in the `docs/` folder:
-
-- [User Guide](docs/USER_GUIDE.md) - How to use the application
-- [Authentication Guide](docs/AUTHENTICATION_GUIDE.md) - Login and security
-- [Navigation Guide](docs/NAVIGATION_GUIDE.md) - Navigate the interface
-- [New Features](docs/NEW_FEATURES.md) - Latest features and updates
-- [Real Dataset Implementation](docs/REAL_DATASET_IMPLEMENTATION.md) - Dataset details
+See [python-ml/README.md](python-ml/README.md) for detailed ML backend documentation including:
+- Model training instructions
+- API endpoint documentation
+- Testing procedures
+- Performance metrics
 
 ## 📈 Model Performance
 
