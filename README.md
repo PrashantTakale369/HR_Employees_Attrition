@@ -37,7 +37,7 @@ We use a **Random Forest Classifier** with 200 decision trees because:
 5. **No Feature Scaling Required** - Works directly with raw employee data
 6. **Interpretable** - Can explain why a specific employee is at risk
 
-**Actual Model Configuration (from code):**
+**Actual Model Configuration :- in my code  **
 ```python
 RandomForestClassifier(
     n_estimators=200,        # 200 decision trees
