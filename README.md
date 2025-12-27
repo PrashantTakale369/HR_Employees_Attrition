@@ -167,43 +167,6 @@ npm run dev
 <img width="1920" height="1080" alt="Screenshot (459)" src="https://github.com/user-attachments/assets/950e9735-74d1-44b5-b871-14841b028a0c" />
 
 
-
-## 📊 Project Structure
-
-```
-hr-insights-viz-main/
-├── src/
-│   ├── pages/          # React pages
-│   │   ├── Home.tsx           # Landing page
-│   │   ├── Dashboard.tsx      # Overview
-│   │   ├── Analytics.tsx      # Deep analytics
-│   │   ├── Employees.tsx      # Employee directory
-│   │   ├── Predictions.tsx    # Single prediction
-│   │   ├── BatchPrediction.tsx    # Bulk analysis
-│   │   ├── AlertsSystem.tsx       # Real-time alerts
-│   │   ├── WhyTheyLeft.tsx        # Leave analysis
-│   │   └── RetentionStrategies.tsx # Retention plans
-│   ├── ml/             # ML integration
-│   │   ├── attritionModel.ts      # TypeScript ML (fallback)
-│   │   ├── pythonMLApi.ts         # Python API client
-│   │   └── leaveAnalysis.ts       # Leave analysis
-│   └── data/
-│       └── attritionData.ts   # Employee dataset
-├── python-ml/          # Python ML backend
-│   ├── attrition_model.py     # ML model implementation
-│   ├── api_server.py          # Flask REST API
-│   ├── train_model.py         # Training script
-│   ├── test_model.py          # Testing script
-│   ├── convert_data.py        # Data conversion
-│   ├── setup.bat              # Windows setup
-│   ├── setup.sh               # Linux/Mac setup
-│   └── requirements.txt       # Python dependencies
-└── models/             # Trained ML models (created after training)
-    ├── attrition_model.pkl
-    ├── scaler.pkl
-    └── label_encoders.pkl
-```
-
 ## 🎓 Getting Started
 
 1. **Clone the repository**
