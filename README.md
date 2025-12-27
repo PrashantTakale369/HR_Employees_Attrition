@@ -8,7 +8,6 @@ You know how expensive it is when good people quit - recruitment costs, training
 
 The app uses machine learning (Random Forest model with 85-90% accuracy) trained on real IBM HR data to spot patterns that usually lead to attrition. It doesn't just give you a "yes/no" answer - it shows you WHY someone might leave (low pay, bad work-life balance, lack of growth) and suggests specific things you can do to keep them around.
 
-Built with React + TypeScript on the front end and Python + Flask for the ML backend.
 
 ## 🎯 Features
 
