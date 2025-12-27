@@ -1,12 +1,24 @@
-from flask import Flask, request, jsonify
-from flask_cors import CORS
+from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
+from typing import List, Dict, Any, Optional
 from attrition_model import AttritionPredictor
 import pandas as pd
 import json
 import os
+import uvicorn
 
-app = Flask(__name__)
-CORS(app)
+app = FastAPI(title="HR Attrition Prediction API", version="1.0.0")
+
+# Add CORS middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 # Initialize model
 predictor = AttritionPredictor()
 
@@ -18,136 +30,112 @@ if os.path.exists(f'{MODEL_DIR}/attrition_model.pkl'):
 else:
     print("No existing model found. Please train the model first.")
 
-@app.route('/health', methods=['GET'])
+# Pydantic models for request validation
+class BatchPredictRequest(BaseModel):
+    employees: List[Dict[str, Any]]
+
+class TrainRequest(BaseModel):
+    csv_path: str = '../data/employee_data.csv'
+    test_size: float = 0.2
+
+class RetentionRequest(BaseModel):
+    employee: Dict[str, Any]
+    risk_score: float = 0
+
+@app.get('/health')
 def health_check():
     """Health check endpoint"""
-    return jsonify({
+    return {
         'status': 'healthy',
         'model_loaded': predictor.model is not None
-    })
+    }
 
-@app.route('/predict', methods=['POST'])
-def predict_attrition():
+@app.post('/predict')
+def predict_attrition(employee_data: Dict[str, Any]):
     """
     Predict attrition for a single employee
-    
-    Request body:
-    {
-        "age": 35,
-        "businessTravel": "Travel_Rarely",
-        "department": "Sales",
-        ...
-    }
     """
     try:
-        employee_data = request.json
-        
         if not employee_data:
-            return jsonify({'error': 'No data provided'}), 400
+            raise HTTPException(status_code=400, detail='No data provided')
         
         if predictor.model is None:
-            return jsonify({'error': 'Model not loaded'}), 500
+            raise HTTPException(status_code=500, detail='Model not loaded')
         
-        # Make prediction
         result = predictor.predict(employee_data)
         
-        return jsonify({
+        return {
             'success': True,
             'data': result
-        })
+        }
     
+    except HTTPException:
+        raise
     except Exception as e:
-        return jsonify({
-            'success': False,
-            'error': str(e)
-        }), 500
+        raise HTTPException(status_code=500, detail=str(e))
 
-@app.route('/predict/batch', methods=['POST'])
-def predict_batch():
+@app.post('/predict/batch')
+def predict_batch(request: BatchPredictRequest):
     """
     Predict attrition for multiple employees
-    
-    Request body:
-    {
-        "employees": [
-            {...employee_data...},
-            {...employee_data...}
-        ]
-    }
     """
     try:
-        data = request.json
-        employees = data.get('employees', [])
+        employees = request.employees
         
         if not employees:
-            return jsonify({'error': 'No employee data provided'}), 400
+            raise HTTPException(status_code=400, detail='No employee data provided')
         
         if predictor.model is None:
-            return jsonify({'error': 'Model not loaded'}), 500
+            raise HTTPException(status_code=500, detail='Model not loaded')
         
-        # Make predictions
         results = predictor.predict(employees)
         
-        return jsonify({
+        return {
             'success': True,
             'count': len(employees),
             'data': results
-        })
+        }
     
+    except HTTPException:
+        raise
     except Exception as e:
-        return jsonify({
-            'success': False,
-            'error': str(e)
-        }), 500
+        raise HTTPException(status_code=500, detail=str(e))
 
-@app.route('/analyze/leave-reasons', methods=['POST'])
-def analyze_leave_reasons():
+@app.post('/analyze/leave-reasons')
+def analyze_leave_reasons(employee_data: Dict[str, Any]):
     """
     Analyze why an employee might leave
-    
-    Request body:
-    {
-        "age": 35,
-        "jobSatisfaction": 1,
-        "workLifeBalance": 2,
-        ...
-    }
     """
     try:
-        employee_data = request.json
-        
         if not employee_data:
-            return jsonify({'error': 'No data provided'}), 400
+            raise HTTPException(status_code=400, detail='No data provided')
         
-        # Analyze reasons
         analysis = predictor.analyze_leave_reasons(employee_data)
         
-        return jsonify({
+        return {
             'success': True,
             'data': analysis
-        })
+        }
     
+    except HTTPException:
+        raise
     except Exception as e:
-        return jsonify({
-            'success': False,
-            'error': str(e)
-        }), 500
+        raise HTTPException(status_code=500, detail=str(e))
 
-@app.route('/model/info', methods=['GET'])
+@app.get('/model/info')
 def model_info():
     """Get model information and feature importance"""
     try:
         if predictor.model is None:
-            return jsonify({'error': 'Model not loaded'}), 500
+            raise HTTPException(status_code=500, detail='Model not loaded')
         
-        # Sort features by importance
         sorted_features = sorted(
             predictor.feature_importance.items(),
             key=lambda x: x[1],
             reverse=True
         )
         
-        return jsonify({
+        return {
             'success': True,
             'data': {
                 'features': predictor.feature_names,
@@ -158,69 +146,50 @@ def model_info():
                     for feat, imp in sorted_features[:10]
                 ]
             }
-        })
+        }
     
+    except HTTPException:
+        raise
     except Exception as e:
-        return jsonify({
-            'success': False,
-            'error': str(e)
-        }), 500
+        raise HTTPException(status_code=500, detail=str(e))
 
-@app.route('/train', methods=['POST'])
-def train_model():
+@app.post('/train')
+def train_model(request: TrainRequest):
     """
     Train or retrain the model
-    
-    Request body:
-    {
-        "csv_path": "path/to/data.csv",
-        "test_size": 0.2
-    }
     """
     try:
-        data = request.json
-        csv_path = data.get('csv_path', '../data/employee_data.csv')
-        test_size = data.get('test_size', 0.2)
+        csv_path = request.csv_path
+        test_size = request.test_size
         
         if not os.path.exists(csv_path):
-            return jsonify({'error': f'Data file not found: {csv_path}'}), 404
+            raise HTTPException(status_code=404, detail=f'Data file not found: {csv_path}')
         
-        # Train model
         results = predictor.train(csv_path, test_size=test_size)
-        
-        # Save model
         predictor.save_model(MODEL_DIR)
         
-        return jsonify({
+        return {
             'success': True,
             'message': 'Model trained successfully',
             'metrics': results
-        })
+        }
     
+    except HTTPException:
+        raise
     except Exception as e:
-        return jsonify({
-            'success': False,
-            'error': str(e)
-        }), 500
+        raise HTTPException(status_code=500, detail=str(e))
 
-@app.route('/retention/strategies', methods=['POST'])
-def generate_retention_strategies():
+@app.post('/retention/strategies')
+def generate_retention_strategies(request: RetentionRequest):
     """
     Generate retention strategies for an employee
-    
-    Request body:
-    {
-        "employee": {...employee_data...},
-        "risk_score": 75.5
-    }
     """
     try:
-        data = request.json
-        employee = data.get('employee', {})
-        risk_score = data.get('risk_score', 0)
+        employee = request.employee
+        risk_score = request.risk_score
         
         if not employee:
-            return jsonify({'error': 'No employee data provided'}), 400
+            raise HTTPException(status_code=400, detail='No employee data provided')
         
         strategies = []
         
@@ -279,41 +248,30 @@ def generate_retention_strategies():
                 'priority': 2
             })
         
-        # Sort by priority and impact
         strategies.sort(key=lambda x: (x['priority'], x['impact'] == 'high'), reverse=True)
         
-        # Calculate effectiveness
         high_impact = sum(1 for s in strategies if s['impact'] == 'high')
         effectiveness = min(high_impact * 25 + len(strategies) * 10, 95)
         
-        return jsonify({
+        return {
             'success': True,
             'data': {
                 'risk_score': risk_score,
                 'risk_level': predictor._get_risk_level(risk_score),
-                'strategies': strategies[:5],  # Top 5 strategies
+                'strategies': strategies[:5],
                 'estimated_effectiveness': effectiveness,
                 'total_strategies': len(strategies)
             }
-        })
+        }
     
+    except HTTPException:
+        raise
     except Exception as e:
-        return jsonify({
-            'success': False,
-            'error': str(e)
-        }), 500
-
-@app.errorhandler(404)
-def not_found(error):
-    return jsonify({'error': 'Endpoint not found'}), 404
-
-@app.errorhandler(500)
-def internal_error(error):
-    return jsonify({'error': 'Internal server error'}), 500
+        raise HTTPException(status_code=500, detail=str(e))
 
 if __name__ == '__main__':
     print("="*60)
-    print("HR Attrition Prediction API Server")
+    print("HR Attrition Prediction API Server (FastAPI)")
     print("="*60)
     print("\nAvailable Endpoints:")
     print("  GET  /health                      - Health check")
@@ -324,6 +282,7 @@ if __name__ == '__main__':
     print("  GET  /model/info                  - Model information")
     print("  POST /train                       - Train/retrain model")
     print("\nStarting server on http://localhost:5000")
+    print("API Documentation: http://localhost:5000/docs")
     print("="*60 + "\n")
     
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    uvicorn.run(app, host="0.0.0.0", port=5000)
