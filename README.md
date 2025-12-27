@@ -37,12 +37,21 @@ We use a **Random Forest Classifier** with 200 decision trees because:
 5. **No Feature Scaling Required** - Works directly with raw employee data
 6. **Interpretable** - Can explain why a specific employee is at risk
 
-**Model Configuration:**
-- 200 decision trees (n_estimators)
-- Maximum depth: 15 levels
-- Minimum samples per split: 10
-- Trained on 1470 employee records
-- 25 input features
+**Actual Model Configuration (from code):**
+```python
+RandomForestClassifier(
+    n_estimators=200,        # 200 decision trees
+    max_depth=15,            # Maximum tree depth
+    min_samples_split=10,    # Min samples to split a node
+    min_samples_leaf=4,      # Min samples in leaf node
+    random_state=42,
+    n_jobs=-1                # Use all CPU cores
+)
+```
+
+**Dataset:**
+- **1,470 employee records** (IBM HR Attrition Dataset)
+- **25 features** including: age, businessTravel, department, distanceFromHome, education, educationField, environmentSatisfaction, gender, jobInvolvement, jobLevel, jobRole, jobSatisfaction, maritalStatus, monthlyIncome, numCompaniesWorked, overTime, performanceRating, relationshipSatisfaction, stockOptionLevel, trainingTimesLastYear, workLifeBalance, yearsAtCompany, yearsInCurrentRole, yearsSinceLastPromotion, yearsWithCurrManager
 
 ## 🚀 Quick Start
 
