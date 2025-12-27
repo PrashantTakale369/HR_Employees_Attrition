@@ -83,38 +83,6 @@ API runs at: `http://localhost:5000`
 - **30+ features** - Age, job satisfaction, income, etc.
 - **CSV format** - Easy to update and retrain
 
-## 📁 Project Structure
-
-```
-HR_Employees_Attrition/
-├── src/                    # React application source
-│   ├── pages/             # All application pages
-│   ├── components/        # Reusable UI components
-│   ├── ml/                # ML integration layer
-│   ├── data/              # Employee data
-│   └── contexts/          # React contexts
-├── public/                # Static assets and dataset
-├── python-ml/             # Python ML backend
-│   ├── attrition_model.py    # ML model implementation
-│   ├── train_model.py        # Model training script
-│   ├── test_model.py         # Testing and evaluation
-│   ├── api_server.py         # Flask REST API
-│   ├── convert_data.py       # Data preprocessing
-│   ├── data/                 # IBM HR dataset
-│   ├── preprossing_file/     # Jupyter notebook analysis
-│   ├── setup.bat             # Windows setup
-│   ├── setup.sh              # Linux/Mac setup
-│   └── requirements.txt      # Python dependencies
-└── package.json              # Node.js dependencies
-```
-
-## 📚 Documentation
-
-See [python-ml/README.md](python-ml/README.md) for detailed ML backend documentation including:
-- Model training instructions
-- API endpoint documentation
-- Testing procedures
-- Performance metrics
 
 ## 📈 Model Performance
 
