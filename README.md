@@ -47,7 +47,8 @@ python3 train_model.py
 python3 api_server.py
 ```
 
-API runs at: `http://localhost:5000`
+API runs at: `http://localhost:5000`  
+**Interactive API Docs:** `http://localhost:5000/docs`
 
 ## 🎯 Key Features
 
@@ -72,7 +73,9 @@ API runs at: `http://localhost:5000`
 
 ### Backend (ML)
 - **Python 3.8+** - Programming language
-- **Flask** - REST API framework
+- **FastAPI** - Modern, fast REST API framework
+- **Pydantic** - Data validation and settings
+- **Uvicorn** - ASGI server
 - **scikit-learn** - Machine learning library
 - **pandas** - Data manipulation
 - **numpy** - Numerical computing
@@ -83,6 +86,13 @@ API runs at: `http://localhost:5000`
 - **30+ features** - Age, job satisfaction, income, etc.
 - **CSV format** - Easy to update and retrain
 
+## 🔌 API Features
+
+- **Auto-generated docs** - Interactive Swagger UI at `/docs`
+- **Type validation** - Automatic request/response validation with Pydantic
+- **High performance** - FastAPI is one of the fastest Python frameworks
+- **Modern standards** - OpenAPI & JSON Schema support
+- **Easy testing** - Built-in API testing interface
 
 ## 📈 Model Performance
 
